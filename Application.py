@@ -69,9 +69,14 @@ class Application:
 
 
     def update_text(self):
+        self.load_deck_view.deck_text.configure(state="normal")
+
         s = self.model.deck.__str__()
         self.load_deck_view.deck_text.delete(1.0, tk.END)
         self.load_deck_view.deck_text.insert(tk.END, s)
+
+        # Set the text widget to read-only mode
+        self.load_deck_view.deck_text.configure(state="disabled")
 
     def start_game(self, mode):
         if mode == FROM_KNOWN_TO_UNKNOWN_MODE:

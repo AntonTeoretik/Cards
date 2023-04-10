@@ -9,6 +9,7 @@ class DeckText(tk.Text):
         super().__init__(master, **kwargs)
         self.configure(bg=DesignSettings.BG_COLOR,
                        fg=DesignSettings.FG_COLOR,
+                       # state="disabled",
                        font=("Courier", 12),
                        wrap="word")
 
