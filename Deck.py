@@ -39,7 +39,7 @@ class Deck:
 
         # Write the deck to a CSV file
         with open(filename, 'w', newline='', encoding='utf-8') as csvfile:
-            writer = csv.writer(csvfile)
+            writer = csv.writer(csvfile, delimiter=";")
             # Write the header row with the language codes
             header_row = [''] * len(language_indices)
             for language_code, index in language_indices.items():
@@ -56,12 +56,14 @@ class Deck:
     def from_csv(self, filename, languages):
         self.cards = []
         with open(filename, 'r', newline='', encoding='utf-8') as csvfile:
-            reader = csv.reader(csvfile)
+            reader = csv.reader(csvfile, delimiter=";")
             header_row = next(reader)
             language_indices = {}
             for i, language_code in enumerate(header_row):
                 language_indices[language_code] = i
             for row in reader:
+                if not row:
+                    continue
                 words = {}
                 for language_code, index in language_indices.items():
                     if index < len(row) and language_code in languages:
