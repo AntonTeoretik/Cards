@@ -1,3 +1,4 @@
+from tkinter import font
 from typing import Literal
 
 from DesignSettings import DesignSettings
@@ -33,3 +34,21 @@ class Label(tk.Label):
         self.configure(bg=DesignSettings.BG_COLOR,
                        fg=DesignSettings.FG_COLOR,
                        font=DesignSettings.FONT)
+
+    def adjust_font_size(self):
+        label = self
+        label_font = font.Font(font=label['font'])
+        text_size = label_font.measure("a" + label['text'] + "a")
+
+        print("font_size ", text_size)
+
+        if text_size > label.winfo_width():
+            print(label.winfo_width())
+
+            new_font_size = label_font['size'] * label.winfo_width() // text_size
+
+            new_font = (label_font['family'], new_font_size, label_font['weight'])
+            label.configure(font=new_font)
+
+    def reset_font_size(self):
+        self.configure(font=DesignSettings.FONT)

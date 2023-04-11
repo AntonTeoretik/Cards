@@ -117,8 +117,8 @@ class CardsView(View):
         self.cards_frame.columnconfigure(0, weight=1)
         self.cards_frame.columnconfigure(1, weight=1)
 
-        self.card_known = Label(self.cards_frame, text="")
-        self.card_unknown = Label(self.cards_frame, text="")
+        self.card_known = Label(self.cards_frame, text="", width=20)
+        self.card_unknown = Label(self.cards_frame, text="", width=20)
 
         self.card_known.configure(bg=DesignSettings.BG_COLOR_CARDS)
         self.card_unknown.configure(bg=DesignSettings.BG_COLOR_CARDS)

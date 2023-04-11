@@ -114,6 +114,8 @@ class Application:
     def clear_card_labels(self):
         self.game_view.card_known.configure(text="")
         self.game_view.card_unknown.configure(text="")
+        self.game_view.card_known.reset_font_size()
+        self.game_view.card_unknown.reset_font_size()
         self.cards_window.update()
 
     def start_cycle(self):
@@ -132,7 +134,11 @@ class Application:
         print("Take card")
         self.model.take_card()
         self.update_game_view_statistic()
+
         self.game_view.card_known.configure(text=self.model.active_card[self.model.known_lan])
+
+        self.game_view.card_known.adjust_font_size()
+
         self.game_view.pick_button.configure(text="Show translation", command=self.show_translation)
         self.cards_window.bind('<Return>', lambda x: self.show_translation())
 
@@ -143,6 +149,8 @@ class Application:
         self.cards_window.bind('<Return>', lambda x: self.card_guessed())
         self.cards_window.bind("'", lambda x: self.card_unguessed())
         self.game_view.pick_button.configure(text="Pick!", state="disabled")
+
+        self.game_view.card_unknown.adjust_font_size()
 
     def card_unguessed(self):
         print("No :-(")
