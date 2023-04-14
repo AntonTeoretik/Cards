@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import filedialog, Toplevel
+import os
 
 import Model
 import View
@@ -50,7 +51,7 @@ class Application:
     # Create a function for browsing for a file
     def browse_file(self, event=None):
         filename = filedialog.askopenfilename(
-            initialdir='.',
+            initialdir=os.path.abspath(__file__),
             title="Choose a CSV file",
             filetypes=(("CSV files", "*.csv"), ("All files", "*.*"))
         )
