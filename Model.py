@@ -33,7 +33,7 @@ class Model:
         self.deck.from_csv(filename, [self.known_lan, self.unknown_lan])
         self.unguessed_cards = self.deck.copy()
 
-    def setMode(self, known_lang, unknown_lang):
+    def set_mode(self, known_lang, unknown_lang):
         self.known_lan = known_lang
         self.unknown_lan = unknown_lang
         print("Languages set: " + known_lang + " " + unknown_lang)

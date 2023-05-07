@@ -44,7 +44,7 @@ class Application:
     def choose_language(self, lang):
         self.unknown_lang = lang
         self.choose_language_view.destroy()
-        self.model.setMode(known_lang=self.known_lang, unknown_lang=self.unknown_lang)
+        self.model.set_mode(known_lang=self.known_lang, unknown_lang=self.unknown_lang)
         self.load_deck_view.update_languages(self.known_lang, self.unknown_lang)
         self.load_deck_view.pack()
 
@@ -68,7 +68,6 @@ class Application:
         self.load_deck_view.next_button_to.configure(state="normal")
         self.load_deck_view.next_button_from.configure(state="normal")
 
-
     def update_text(self):
         self.load_deck_view.deck_text.configure(state="normal")
 
@@ -81,9 +80,9 @@ class Application:
 
     def start_game(self, mode):
         if mode == FROM_KNOWN_TO_UNKNOWN_MODE:
-            self.model.setMode(self.known_lang, self.unknown_lang)
+            self.model.set_mode(self.known_lang, self.unknown_lang)
         elif mode == FROM_UNKNOWN_TO_KNOWN_MODE:
-            self.model.setMode(self.unknown_lang, self.known_lang)
+            self.model.set_mode(self.unknown_lang, self.known_lang)
 
         if not self.model.able_to_start():
             return
@@ -182,7 +181,6 @@ class Application:
         elif not self.model.game_started:
             self.cards_window.bind('<Return>', lambda x: self.finish_the_game())
             self.game_view.pick_button.configure(text="Finish the game", command=self.finish_the_game)
-
 
     @staticmethod
     def create_window():

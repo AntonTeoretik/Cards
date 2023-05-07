@@ -40,8 +40,6 @@ class Label(tk.Label):
         label_font = font.Font(font=label['font'])
         text_size = label_font.measure("a" + label['text'] + "a")
 
-        print("font_size ", text_size)
-
         if text_size > label.winfo_width():
             print(label.winfo_width())
 
