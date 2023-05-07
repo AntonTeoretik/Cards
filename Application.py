@@ -120,17 +120,24 @@ class Application:
 
     def start_cycle(self):
         print("Start cycle")
+        self.reset_no_button()
 
         self.model.start_cycle()
+
         self.update_game_view_statistic()
         self.game_view.pick_button.configure(text="Pick!", command=self.take_card)
+
         self.cards_window.bind('<Return>', lambda x: self.take_card())
 
     def finish_the_game(self):
+        self.reset_no_button()
+
         self.load_deck_view.continue_button.configure(state="disabled", command=self.continue_game)
         self.cards_window.destroy()
 
     def take_card(self):
+        self.reset_no_button()
+
         print("Take card")
         self.model.take_card()
         self.update_game_view_statistic()
@@ -154,13 +161,19 @@ class Application:
 
     def card_unguessed(self):
         print("No :-(")
-        self.model.distribute_card(False)
+        self.model.guess_card(False)
         self.prepare_for_next_round()
 
     def card_guessed(self):
         print("Yeees!")
-        self.model.distribute_card(True)
+        self.model.guess_card(True)
         self.prepare_for_next_round()
+
+    def end_round_with_next_step(self, next_step):
+        print("End round with next step")
+        self.model.end_round()
+        self.update_game_view_statistic()
+        next_step()
 
     def prepare_for_next_round(self):
         print("Prepare for next round")
@@ -169,18 +182,35 @@ class Application:
 
         self.clear_card_labels()
         self.update_game_view_statistic()
-        self.game_view.no_button.configure(state="disabled")
+
+        self.game_view.no_button.configure(text="Back", command=self.revert_back)
+        self.cards_window.bind('<BackSpace>', lambda _: self.revert_back())
+
         self.game_view.got_it.configure(state="disabled")
-        self.game_view.pick_button.configure(state="normal", command=self.take_card)
+        self.game_view.pick_button.configure(text="Pick!", state="normal")
+        self._bind_step(self.take_card)
 
-        self.cards_window.bind('<Return>', lambda x: self.take_card())
-        if self.model.game_started and self.model.cycle_ended:
-            self.cards_window.bind('<Return>', lambda x: self.start_cycle())
-            self.game_view.pick_button.configure(text="Start next cycle", command=self.start_cycle)
+        if not self.model.game_started:
+            self._bind_step(self.finish_the_game)
+            self.game_view.pick_button.configure(text="Finish!")
 
-        elif not self.model.game_started:
-            self.cards_window.bind('<Return>', lambda x: self.finish_the_game())
-            self.game_view.pick_button.configure(text="Finish the game", command=self.finish_the_game)
+        elif self.model.cycle_ended:
+            self._bind_step(self.start_cycle)
+            self.game_view.pick_button.configure(text="Next cycle!")
+
+    def revert_back(self):
+        self.model.return_card_back()
+        self.take_card()
+
+    def reset_no_button(self):
+        self.game_view.no_button.configure(text="No :-(",
+                                           state="disabled",
+                                           command=self.card_unguessed)
+        self.cards_window.unbind("<BackSpace>")
+
+    def _bind_step(self, next_step):
+        self.cards_window.bind('<Return>', lambda _: self.end_round_with_next_step(next_step))
+        self.game_view.pick_button.configure(command=lambda: self.end_round_with_next_step(next_step))
 
     @staticmethod
     def create_window():
