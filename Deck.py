@@ -64,6 +64,8 @@ class Deck:
             for row in reader:
                 if not row:
                     continue
+                if row[0].lstrip().startswith('#'):
+                    continue  # Skip this iteration if row starts with '#' after removing leading whitespace
                 words = {}
                 for language_code, index in language_indices.items():
                     if index < len(row) and language_code in languages:
